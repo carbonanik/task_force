@@ -1,9 +1,20 @@
-import 'dart:ui';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
-class OverlayScreen extends StatelessWidget {
-  const OverlayScreen({super.key});
+class OverlayWidget extends StatefulWidget {
+  const OverlayWidget({super.key});
+
+  @override
+  State<OverlayWidget> createState() => _OverlayWidgetState();
+}
+
+class _OverlayWidgetState extends State<OverlayWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,96 +22,79 @@ class OverlayScreen extends StatelessWidget {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
           width: double.infinity,
-          height: 300,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.3),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.white.withOpacity(0.2),
-                      Colors.white.withOpacity(0.05),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0)),
+          child: GestureDetector(
+            onTap: () {
+              FlutterOverlayWindow.getOverlayPosition().then((value) {
+                log("Overlay Position: $value");
+              });
+            },
+            child: Stack(
+              children: [
+                Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.alarm_on_rounded,
-                        size: 48,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      "Task Reminder",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "It's time to handle your scheduled task!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.white70),
-                    ),
-                    const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        FlutterOverlayWindow.closeOverlay();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.deepPurple,
-                        minimumSize: const Size(double.infinity, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                    ListTile(
+                      leading: Container(
+                        height: 80.0,
+                        width: 80.0,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          shape: BoxShape.circle,
+                          image: const DecorationImage(
+                            image: NetworkImage(
+                              "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+                            ),
+                          ),
                         ),
-                        elevation: 0,
                       ),
-                      child: const Text(
-                        "Got it!",
+                      title: const Text(
+                        "Your Task",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
+                      ),
+                      subtitle: const Text("Your Task"),
+                    ),
+                    const Spacer(),
+                    const Divider(color: Colors.black54),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Your Task"),
+                              Text("Last call - 1 min ago"),
+                            ],
+                          ),
+                          Text(
+                            "Flutter Overlay",
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    onPressed: () async {
+                      await FlutterOverlayWindow.closeOverlay();
+                    },
+                    icon: const Icon(Icons.close, color: Colors.black),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

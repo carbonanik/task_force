@@ -30,20 +30,26 @@ class AlarmService {
 }
 
 @pragma('vm:entry-point')
-void alarmCallback(int id, Map<String, dynamic> params) async {
+void alarmCallback(int id, Map<String, dynamic> params) {
   final String title = params['title'] ?? 'Task Reminder';
 
   debugPrint("Alarm fired for: $title");
 
+  showOverlay();
+}
+
+void showOverlay() async {
   if (await FlutterOverlayWindow.isPermissionGranted()) {
     await FlutterOverlayWindow.showOverlay(
       enableDrag: true,
+      overlayTitle: "X-SLAYER",
+      overlayContent: 'Overlay Enabled',
       flag: OverlayFlag.defaultFlag,
-      alignment: OverlayAlignment.center,
-      height: WindowSize.matchParent,
+      visibility: NotificationVisibility.visibilityPublic,
+      positionGravity: PositionGravity.auto,
+      height: 500,
       width: WindowSize.matchParent,
-      overlayTitle: title,
-      overlayContent: "It's time for your task!",
+      startPosition: const OverlayPosition(0, 0),
     );
   } else {
     debugPrint("Overlay permission not granted");
