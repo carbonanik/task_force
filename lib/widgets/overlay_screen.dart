@@ -24,7 +24,10 @@ class _OverlayWidgetState extends State<OverlayWidget> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
           width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
           child: GestureDetector(
             onTap: () {
               FlutterOverlayWindow.getOverlayPosition().then((value) {
